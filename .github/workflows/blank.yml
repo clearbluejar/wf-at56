@@ -45,6 +45,18 @@ jobs:
 
     # Steps represent a sequence of tasks that will be executed as part of the job
     steps:
+
+      # Free up disk space as the macOS runners end up using most for Xcode
+      # versions we don't need and iOS simulators.
+      - name: Free up disk space
+        # if:  matrix.runner == 'macos-latest' 
+        run: |
+          df -h
+          echo '*** Delete iOS simulators'
+          xcrun simctl delete all
+          sudo rm -rf ~/Library/Developer/CoreSimulator/Caches/*
+          df -h
+      
       # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
       - uses: actions/checkout@v4
 
