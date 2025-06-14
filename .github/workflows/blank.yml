@@ -66,17 +66,18 @@ jobs:
           brew install blacktop/tap/ipsw
 
       # Runs a diff
-      - name: Create Diff
+      - name: Download IPSWs
         run: |
           mkdir /tmp/IPSW1 /tmp/IPSW2
           ipsw dl appledb --os ${{ inputs.osType }} --device '${{ inputs.device }}' --build '${{ inputs.prev_build }}' --output /tmp/IPSW1 --confirm
           ipsw dl appledb --os ${{ inputs.osType }} --device '${{ inputs.device }}' --build '${{ inputs.next_build }}' --output /tmp/IPSW2 --confirm
+          df -h
+          
+      - name: Create Diff
+        run: | 
+          df -h
           ipsw diff -V --output . \
                        --markdown \
-                       --fw \
-                       --launchd \
-                       --feat \
-                       --strs \
                        /tmp/IPSW1/*.ipsw \
                        /tmp/IPSW2/*.ipsw
           git config --global user.name 'clearbluejar'
