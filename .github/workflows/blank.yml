@@ -41,7 +41,7 @@ jobs:
   # This workflow contains a single job called "build"
   build:
     # The type of runner that the job will run on
-    runs-on: macos-14
+    runs-on: macos-latest
 
     # Steps represent a sequence of tasks that will be executed as part of the job
     steps:
@@ -77,10 +77,11 @@ jobs:
         run: | 
           df -h
           ipsw diff -V --output . \
-                       --markdown \
+                       --json \
                        /tmp/IPSW1/*.ipsw \
                        /tmp/IPSW2/*.ipsw
           git config --global user.name 'clearbluejar'
           git config --global user.email '3752074+clearbluejar@users.noreply.github.com'
+          git add -A *.json
           git commit -am "Automated Diff of ${{ inputs.osType }} ${{ inputs.prev_build }} -> ${{ inputs.next_build }}"
           git push
